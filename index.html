@@ -1,9 +1,25 @@
 <html>
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="./manifest.json">
+  <script>
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('./service-worker.js').then(function() { console.log('Service Worker Registered');});
+    }
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
   <script src="./VueQrcodeReader.umd.min.js"></script>
+  <title>Final</title>
 </head>
 <body>
+  <style>
+    body {
+      text-align:center;
+      vertical-align:bottom;
+      margin:0;
+    }
+  </style>
   <div id="app">
     <p class="error">{{error}}</p>
     <p class="decode-result">Last result: <b>{{result}}</b></p>
