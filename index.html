@@ -31,7 +31,7 @@
     <!--<p class="decode-result">Last result: <b>{{result}}</b></p>-->
     <qrcode-stream :camera="camera" @decode="onDecode" @init="onInit">
     <div v-show="showScanConfirmation" class="scan-confirmation">
-      <img src="$withBase('./checkmark.svg')" alt="Checkmark" width="device-width"/>
+      <img src="./checkmark.svg" alt="Checkmark" width="128px"/>
     </div>
     </qrcode-stream>
   </div>
