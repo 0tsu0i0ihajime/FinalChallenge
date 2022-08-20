@@ -29,7 +29,7 @@
   <div id="app">
     <p class="error">{{error}}</p>
     <!--<p class="decode-result">Last result: <b>{{result}}</b></p>-->
-    <qrcode-stream @decode="onDecode" @init="onInit"></qrcode-stream>
+    <qrcode-stream :camera="camera" @decode="onDecode" @init="onInit"></qrcode-stream>
   </div>
   <script>
     const QrcodeStream = window.VueQrcodeReader.QrcodeStream;
@@ -38,9 +38,12 @@
       components:{
         'qrcode-stream':QrcodeStream,
       },
-      data:{
-        result:'',
-        error:''
+      data(){
+      return{
+        camera:'auto',
+        result:null,
+        error:null
+        }
       },
       methods:{
         onDecode(result){
