@@ -48,8 +48,7 @@
         result:null,
         error:null,
         showScanConfirmation:false
-        },
-        fat:false;
+        }
       },
       methods:{
         async onInit(promise){
@@ -69,8 +68,6 @@
         } else if (error.name === 'StreamApiNotSupportedError') {
           this.error = "ERROR: Stream API is not supported in this browser"
         }
-      }finally{
-      this.showScanConfirmation = this.camera === "off"
       }
     },
         async onDecode(content){
