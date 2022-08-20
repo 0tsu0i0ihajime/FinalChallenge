@@ -23,7 +23,7 @@
   <div id="app">
     <p class="error">{{error}}</p>
     <!--<p class="decode-result">Last result: <b>{{result}}</b></p>-->
-    <qrcode-stream @decode="onDecode" @init="onInit"/>
+    <qrcode-stream @decode="onDecode" @init="onInit"></qrcode-stream>
   </div>
   <script>
     const QrcodeStream = window.VueQrcodeReader.QrcodeStream;
