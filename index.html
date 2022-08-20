@@ -1,7 +1,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
   <link rel="manifest" href="./manifest.json">
   <script>
     if('serviceWorker' in navigator){
@@ -29,25 +29,44 @@
   <div id="app">
     <p class="error">{{error}}</p>
     <!--<p class="decode-result">Last result: <b>{{result}}</b></p>-->
-    <qrcode-stream :camera="camera" @decode="onDecode" @init="onInit"></qrcode-stream>
+    <qrcode-stream :camera="camera" @decode="onDecode" @init="onInit">
+    <div v-show="showScanConfirmation" class="scan-confirmation">
+      <img src="$withBase('./checkmark.svg')" alt="Checkmark" width="device-width"/>
+    </div>
+    </qrcode-stream>
   </div>
   <script>
     const QrcodeStream = window.VueQrcodeReader.QrcodeStream;
     new Vue({
       el:'#app',
       components:{
-        'qrcode-stream':QrcodeStream,
+        'qrcode-stream':QrcodeStream;
       },
       data(){
       return{
         camera:'auto',
         result:null,
-        error:null
+        error:null,
+        showScanConfirmation:false
         }
       },
       methods:{
-        onDecode(result){
-          this.result=result
+        async onDecode(content){
+          this.result=content
+          this.pause()
+          await this.timeout(100)
+          this.unpause()
+        },
+        unpause(){
+          this.camera = 'auto'
+        },
+        pause(){
+          this.camera = 'off'
+        },
+        timeout(ms){
+          return new Promise(resolve => {
+            window.setTimeout(resolve, ms)
+          })
         },
         async onInit(promise){
           try{
@@ -66,6 +85,8 @@
         } else if (error.name === 'StreamApiNotSupportedError') {
           this.error = "ERROR: Stream API is not supported in this browser"
         }
+      }finally{
+      this.showScanConfirmation = this.camera === "off"
       }
     }
    }
