@@ -16,8 +16,7 @@
   <div id="app">
     <p class="error">{{error}}</p>
     <!--<p class="decode-result">Last result: <b>{{result}}</b></p>-->
-    <qrcode-stream @decode="onDecode" @init="onInit">
-    </qrcode-stream>
+    <qrcode-stream @decode="onDecode" @init="onInit"/>
   </div>
   <script>
     const QrcodeStream = window.VueQrcodeReader.QrcodeStream;
@@ -28,7 +27,8 @@
       },
       data:{
         result:'',
-        error:''
+        error:'',
+        FullscreenChange:false
       },
       methods:{
         async onInit(promise){
@@ -52,7 +52,7 @@
     },
         onDecode(result){
           this.result=result
-        },
+        }
    }
   })
   </script>
