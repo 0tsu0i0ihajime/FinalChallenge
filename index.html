@@ -24,7 +24,7 @@
     new Vue({
       el:'#app',
       components:{
-        'qrcode-stream':QrcodeStream;
+        'qrcode-stream':QrcodeStream,
       },
       data:{
         result:'',
@@ -52,7 +52,7 @@
     },
         onDecode(result){
           this.result=result
-        }
+        },
    }
   })
   </script>
