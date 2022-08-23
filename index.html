@@ -15,28 +15,48 @@
   <script src="./VueQrcodeReader.umd.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script type="text/javascript">
+    var dbName = "VisitorData"
+    var verNo = 1;
+    var objStoreName = "Visitor";
+    var db;
+    var openReq = indexedDB.open(dbName,verNo);
     function openDB(){
-      let dbName = "VisitorData"
-      let verNo = 1;
+      var dbName = "VisitorData"
+      var verNo = 1;
+      var objStoreName = "Visitor";
+      var db;
       var openReq = indexedDB.open(dbName,verNo);
       openReq.onupgradeneeded = function(event){
-        var db = event.target.result;
+        db = openReq.result;
         db.onerror = function(event){
-          console.error('DBの作成に失敗')
+          console.error('DBの作成に失敗しました')
         };
-        var objStoreName = "Visitor";
         if(!db.objectStoreNames.contains(objStoreName)){
           var objStoreKey = { keyPath: 'id' };
           var obj = db.createObjectStore(objStoreName, objStoreKey);
+          console.log('オブジェクトストア生成成功');
         }
       };
       openReq.onsuccess = function(event){
-        var db = event.target.result;
+        db = openReq.result;
         console.log('DBOpen成功')
       }
       openReq.onerror = function(event){
         console.error('DBOpen失敗')
       }
+    }
+    function addData(){
+      db = openReq.result;
+      var transaction = db.transaction("Visitor", "readwrite");
+      var objectStore = transaction.objectStore(objStoreName);
+      var data = { id: 'D4A65B7E-2BBA-435E-A676-B3CE9517E926', data1:'abcde',data2:'123',data3:{data3_1:'001',data3_2:1000}};
+      // { id: 'DA4FDSDF-FAS4-44AT-ADV1-F4531X15EG13', data1:'AH',data2:'456',data3:{data3_1:'132',data3_2:100}}
+      var request = objectStore.add(data);
+      request.onsuccess = function(event){
+        console.log('保存成功');
+      };request.onerror = function(event){
+        console.error('保存失敗。 event:',event);
+      };
     }
   </script>
   <title>Final</title>
@@ -67,18 +87,29 @@
         max-height: 80%;
         margin: auto; 
     }
+    .AddData{
+      position: absolute;bottom:0px;left: 20px;z-index: 100;
+    }
+    .AddData div{
+      position: absolute;bottom: 30px;z-index: 10;
+    }
   </style>
   <div id="app">
     <p class="error">{{error}}</p>
     <div v-if="!FullscreenChange">
     <p class="decode-result">Last result: <b>{{result}}</b></p>
-    <button style="position: fixed;bottom:20px;left:20px;z-index:100;" type="button"@click="openDB">DBOpen</button>
-    <button style="position: fixed;bottom:20px;right: 20px;z-index: 100;" type="button" @click="onFullChange">全画面に変更</button>
+    <div class="AddData">
+    <button type="button" @click="addData">DBData追加</button>
+    <div class="Data">
+    <button class="Data" type="button"@click="openDB">DBを開く</button>
+    </div>
+    </div>
+    <button style="position: fixed;bottom:20px;right: 20px;z-index: 1000;" type="button" @click="onFullChange">全画面に変更</button>
     </div>
     <div v-if="FullscreenChange">
-      <button style="position:fixed;bottom:20px;right:20px;z-index:100;" type="button" @click="onDefaultChange">全画面を終了</button>
+      <button style="position:fixed;bottom:20px;right:20px;z-index:1000;" type="button" @click="onDefaultChange">全画面を終了</button>
     </div>
-    <qrcode-stream @decode="onDecode" @init="onInit" class="wrapper inside overlay tracking-layer camera pause-frame" id="Change"/>
+    <qrcode-stream @decode="onDecode" @init="onInit" class="fullscreen" id="Change"/>
   </div>
   <script>
     const QrcodeStream = window.VueQrcodeReader.QrcodeStream;
