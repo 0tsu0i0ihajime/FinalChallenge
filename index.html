@@ -14,64 +14,42 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
   <script src="./VueQrcodeReader.umd.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script type="text/javascript">
-    const dbName = "VisitorData"
-    const verNo = 1;
-    const objStoreName = "Visitor";
-    let db;
-    var openReq = indexedDB.open(dbName,verNo);
-    function openDB(){
-      var openReq = indexedDB.open(dbName,verNo);
-      openReq.onupgradeneeded = function(event){
-        db = openReq.result;
-        db.onerror = function(event){
-          console.error('DBの作成に失敗しました')
-        };
-        if(!db.objectStoreNames.contains(objStoreName)){
-          var objStoreKey = { keyPath: 'id' };
-          var obj = db.createObjectStore(objStoreName, objStoreKey);
-          console.log('オブジェクトストア生成成功');
-        }
-      };
-      openReq.onsuccess = function(event){
-        db = openReq.result;
-        console.log('DBOpen成功')
-      }
-      openReq.onerror = function(event){
-        console.error('DBOpen失敗')
-      }
+  <script src="https://unpkg.com/dexie@latest/dist/dexie.min.js"></script>
+  <script>
+    var db = new Dexie("VisitorsDataBase");
+    db.version(1).stores({
+      Visitors: "id, class, name, place"
+    });
+    function bulkPutData(){
+      db.Visitors
+        .bulkPut([
+          {id:"D4A65B7E-2BBA-435E-A676-B3CE9517E926", class:"3E11", name:"加藤滉大", place:"203"},
+          {id:"DA66VZC4-14RA-UCI8-LEO2-AJVJXOA3578V", class:"2C11", name:"金子巧磨", place:"2C"},
+          {id:"5AG4644B-4SGE-JSIS-2Z2BEG5AFGE4GS4G4", class:"2C08", name:"長田賢幸", place:"104"}
+        ])
+        .catch((error)=>{
+          console.error(error);
+        });
     }
-    function _addData(data){
-      db = openReq.result;
-      let transaction = db.transaction("Visitor", "readwrite");
-      transaction.oncomplete = function(event){
-        console.log('All done!');
-      };
-      transaction.onerror = function(event){
-        console.error('transaction制御失敗。 event:', event);
-      }
-      let objectStore = transaction.objectStore("Visitor");
-      let arrData = new Array();
-      if(Array.isArray(data) == false){
-        arrData[0] = data;
-      }
-      else{
-        arrData = data;
-      }
-      for(var i in arrData){
-        var request = objectStore.add(arrData[i]);
-        request.onsuccess = function(event){
-          console.log('保存成功');
-        };
-        request.onerror = function(event){
-          console.log('保存失敗。 event:', event);
-        };
-      }
+    function getData(data){
+      db.Visitors.get(data)
+        .then((visitor)=>{
+          console.log(visitor.place);
+          // return visitor.place もろもろの結果を考えるにここが上手くいっていない
+        })
+        .catch((error)=>{
+          console.error(error);
+          return false
+        });
     }
-    function addData(){
-      var data = [{ id: 'D4A65B7E-2BBA-435E-A676-B3CE9517E926', data1:'abcde',data2:'123',data3:{data3_1:'001',data3_2:1000}},
-                  { id: 'DA4FDSDF-FAS4-44AT-ADV1-F4531X15EG13', data1:'AH',data2:'456',data3:{data3_1:'132',data3_2:100}}];
-      _addData(data);
+    function deleteData(){
+      db.delete()
+        .then(()=>{
+          console.log('Database successfully deleted');
+        })
+        .catch((error)=>{
+          console.error(error);
+        })
     }
   </script>
   <title>Final</title>
@@ -112,17 +90,21 @@
   <div id="app">
     <p class="error">{{error}}</p>
     <div v-if="!FullscreenChange">
-    <p class="decode-result">Last result: <b>{{result}}</b></p>
+    <p class="decode-result">Last result: <b>{{result}}</b><br>
+    Last answer: <b>{{answer}}</b></p>
     <div class="AddData">
-    <button type="button" @click="addData">DBData追加</button>
-    <div class="Data">
-    <button class="Data" type="button"@click="openDB">DBを開く</button>
+    <button type="button" @click="bulkPutData">DBData追加</button>
+    <div class="deleteData">
+    <button class="deleteData" type="button" @click="deleteData">DBData削除</button>
     </div>
     </div>
     <button style="position: fixed;bottom:20px;right: 20px;z-index: 1000;" type="button" @click="onFullChange">全画面に変更</button>
     </div>
     <div v-if="FullscreenChange">
       <button style="position:fixed;bottom:20px;right:20px;z-index:1000;" type="button" @click="onDefaultChange">全画面を終了</button>
+    </div>
+    <div v-if="pause">
+      GooD!
     </div>
     <qrcode-stream @decode="onDecode" @init="onInit" class="fullscreen" id="Change"/>
   </div>
@@ -136,6 +118,8 @@
       data:{
         result:'',
         error:'',
+        answer:'',
+        pause:false,
         FullscreenChange:true
       },
       methods:{
@@ -159,7 +143,9 @@
       }
     },
         onDecode(result){
-          this.result=result
+          this.result=result;
+          this.answer = getData(result);
+          console.log(this.answer)
         },
         onFullChange(){
           $("#Change").toggleClass("normal","fullscreen");
