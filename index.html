@@ -15,16 +15,12 @@
   <script src="./VueQrcodeReader.umd.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script type="text/javascript">
-    var dbName = "VisitorData"
-    var verNo = 1;
-    var objStoreName = "Visitor";
-    var db;
+    const dbName = "VisitorData"
+    const verNo = 1;
+    const objStoreName = "Visitor";
+    let db;
     var openReq = indexedDB.open(dbName,verNo);
     function openDB(){
-      var dbName = "VisitorData"
-      var verNo = 1;
-      var objStoreName = "Visitor";
-      var db;
       var openReq = indexedDB.open(dbName,verNo);
       openReq.onupgradeneeded = function(event){
         db = openReq.result;
@@ -45,18 +41,37 @@
         console.error('DBOpen失敗')
       }
     }
-    function addData(){
+    function _addData(data){
       db = openReq.result;
-      var transaction = db.transaction("Visitor", "readwrite");
-      var objectStore = transaction.objectStore(objStoreName);
-      var data = { id: 'D4A65B7E-2BBA-435E-A676-B3CE9517E926', data1:'abcde',data2:'123',data3:{data3_1:'001',data3_2:1000}};
-      // { id: 'DA4FDSDF-FAS4-44AT-ADV1-F4531X15EG13', data1:'AH',data2:'456',data3:{data3_1:'132',data3_2:100}}
-      var request = objectStore.add(data);
-      request.onsuccess = function(event){
-        console.log('保存成功');
-      };request.onerror = function(event){
-        console.error('保存失敗。 event:',event);
+      let transaction = db.transaction("Visitor", "readwrite");
+      transaction.oncomplete = function(event){
+        console.log('All done!');
       };
+      transaction.onerror = function(event){
+        console.error('transaction制御失敗。 event:', event);
+      }
+      let objectStore = transaction.objectStore("Visitor");
+      let arrData = new Array();
+      if(Array.isArray(data) == false){
+        arrData[0] = data;
+      }
+      else{
+        arrData = data;
+      }
+      for(var i in arrData){
+        var request = objectStore.add(arrData[i]);
+        request.onsuccess = function(event){
+          console.log('保存成功');
+        };
+        request.onerror = function(event){
+          console.log('保存失敗。 event:', event);
+        };
+      }
+    }
+    function addData(){
+      var data = [{ id: 'D4A65B7E-2BBA-435E-A676-B3CE9517E926', data1:'abcde',data2:'123',data3:{data3_1:'001',data3_2:1000}},
+                  { id: 'DA4FDSDF-FAS4-44AT-ADV1-F4531X15EG13', data1:'AH',data2:'456',data3:{data3_1:'132',data3_2:100}}];
+      _addData(data);
     }
   </script>
   <title>Final</title>
