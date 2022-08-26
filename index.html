@@ -37,6 +37,7 @@
           console.log(visitor.place);
           var txt1 = document.getElementById("LA");
           txt1.innerTEXT = visitor.name + '、' + visitor.place;
+          return visitor.place
           //alert(visitor.place);
           // return visitor.place もろもろの結果を考えるにここが上手くいっていない
         })
@@ -109,7 +110,7 @@
     <div v-if="pause">
       GooD!
     </div>
-    <qrcode-stream @decode="onDecode" @init="onInit" class="fullscreen" id="Change"/>
+    <qrcode-stream :camera="camera" @decode="onDecode" @init="onInit" class="fullscreen" id="Change"/>
   </div>
   <script>
     const QrcodeStream = window.VueQrcodeReader.QrcodeStream;
@@ -147,8 +148,8 @@
     },
         onDecode(result){
           this.result=result;
-          if(this.result !==null){
-            var JTF = getData(result);
+          if(result !==null){
+            var JTF = getData(this.result);
             await this.timeout(5000);
             if(JTF !== null){
               this.pause()
