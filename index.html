@@ -147,8 +147,17 @@
     },
         onDecode(result){
           this.result=result;
-          this.answer = getData(result);
-          console.log(this.answer)
+          if(this.result !==null){
+            var JTF = getData(result);
+            await this.timeout(5000);
+            if(JTF !== null){
+              this.pause()
+              await this.timeout(100)
+              this.unpause()
+            }else{
+              console.log('kuso')
+            }
+          }
         },
         onFullChange(){
           $("#Change").toggleClass("normal","fullscreen");
@@ -157,6 +166,17 @@
         onDefaultChange(){
           $("#Change").toggleClass("normal","fullscreen");
           this.FullscreenChange=false;
+        },
+        unpause(){
+          this.camera = 'auto';
+        },
+        pause(){
+          this.camera = 'off';
+        },
+        timeout(ms){
+          return new Promise(resolve => {
+            window.setTimeout(resolve, ms)
+          })
         }
    }
   })
