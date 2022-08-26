@@ -35,6 +35,8 @@
       db.Visitors.get(data)
         .then((visitor)=>{
           console.log(visitor.place);
+          var txt1 = document.getElementById("LA");
+          txt1.innerTEXT = visitor.name + '、' + visitor.place;
           //alert(visitor.place);
           // return visitor.place もろもろの結果を考えるにここが上手くいっていない
         })
@@ -92,7 +94,7 @@
     <p class="error">{{error}}</p>
     <div v-if="!FullscreenChange">
     <p class="decode-result">Last result: <b>{{result}}</b><br>
-    Last answer: <b>{{answer}}</b></p>
+    Last answer: <b id="LA"></b></p>
     <div class="AddData">
     <button type="button" @click="bulkPutData">DBData追加</button>
     <div class="deleteData">
