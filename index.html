@@ -81,8 +81,7 @@ if ('serviceWorker' in navigator) {
     </div>
     	<li class="fullscreen" id="Change">
     <qrcode-stream :camera="camera" @decode="onDecode" @init="onInit”/>
-	<b v-if=“Jpause”>
-//ここにポーズ時の画像
+	<b v-if=“Jpause”><img src="./OK.png alt="認証完了">
 	</b>
 	</li>
   </div>
