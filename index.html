@@ -1,20 +1,20 @@
 <html>
 <head>
-  <meta charset="UTF-8">
-  <link rel="manifest" href="./manifest.json">
-  <script>
-    if ('serviceWorker' in navigator) {
+<meta charset="UTF-8">
+<link rel="manifest" href="./manifest.json">
+<script>
+if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('js/serviceworker.js').then(function(registration) {
             console.log('ServiceWorker registration successful with scope: ', registration.scope);
         }).catch(function(err) {
             console.log('ServiceWorker registration failed: ', err);
         });
     }    
-    </script>
-  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-  <script src="./VueQrcodeReader.umd.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://unpkg.com/dexie@latest/dist/dexie.min.js"></script>
+ </script>
+ <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+ <script src="./VueQrcodeReader.umd.min.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+ <script src="https://unpkg.com/dexie@latest/dist/dexie.min.js"></script>
   <script>
     var db = new Dexie("VisitorsDataBase");
     db.version(1).stores({
@@ -31,7 +31,7 @@
           console.error(error);
         });
     }
-    function getData(data){
+     function getData(data){
       db.Visitors.get(data)
         .then((visitor)=>{
           console.log(visitor.place);
@@ -52,7 +52,7 @@
           console.error(error);
         })
     }
-  </script>
+      </script>
   <title>Final</title>
 </head>
 <body>
@@ -79,7 +79,7 @@
     <div v-if="FullscreenChange">
       <button style="position:fixed;bottom:20px;right:20px;z-index:1000;" type="button" @click="onDefaultChange">全画面を終了</button>
     </div>
-	<li class="fullscreen" id="Change">
+    	<li class="fullscreen" id="Change">
     <qrcode-stream :camera="camera" @decode="onDecode" @init="onInit”/>
 	<b v-if=“Jpause”>
 //ここにポーズ時の画像
