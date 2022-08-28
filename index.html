@@ -106,10 +106,6 @@
     </div>
   </div>
   <script>
-    function innerTextLAE(ChangeText){
-      var LAE = document.getElementById("LA");
-      LAE.innerText = ChangeText;
-    }
     const QrcodeStream = window.VueQrcodeReader.QrcodeStream;
     new Vue({
       el:'#app',
@@ -182,6 +178,10 @@
         },
    }
   })
+    function innerTextLAE(ChangeText){
+      var LAE = document.getElementById("LA");
+      LAE.innerText = ChangeText;
+    }
   </script>
 </body>
 </html>
