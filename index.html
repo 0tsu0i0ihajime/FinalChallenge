@@ -128,9 +128,7 @@
         } else if (error.name === 'StreamApiNotSupportedError') {
           this.error = "ERROR: Stream API is not supported in this browser"
         }
-      } finally {
-        this.JTFPause = this.camera === 'off' && this.DPause === false
-      }
+      } 
     },
         async onDecode(result){
           this.result=result;
@@ -141,10 +139,12 @@
                 var LAE = document.getElementById("LA");
                 LAE.innerText = visitor.name + '、' + visitor.place;
                 if(visitor.name !== null){
+                  this.JTFPause = true;
                   this.pause()
                   setTimeout(()=>{
                     this.unpause()
                     LAE.innerText = '';
+                    this.JTFPause = false;
                   },1000);
                 }
               })
