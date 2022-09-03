@@ -1,9 +1,9 @@
-var db = new Dexie("VisitorsDataBase");
-db.version(1).stores({
+var local_db = new Dexie("VisitorsDataBase");
+local_db.version(1).stores({
     Visitors: "id, class, name, place"
 });
 function bulkPutData(){
-    db.Visitors
+    local_db.Visitors
     .bulkPut([
         {id:"D4A65B7E-2BBA-435E-A676-B3CE9517E926", class:"3E11", name:"KK", place:"203"},
         {id:"DA66VZC4-14RA-UCI8-LEO2-AJVJXOA3578V", class:"2C11", name:"KT", place:"2C"},
@@ -17,7 +17,7 @@ function bulkPutData(){
         });
     }
     function deleteData(){
-      db.delete()
+      local_db.delete()
         .then(()=>{
           console.log('Database successfully deleted');
         })
