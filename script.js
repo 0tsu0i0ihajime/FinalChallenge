@@ -62,7 +62,7 @@ function bulkPutData(){
         async onDecode(result){
           this.result=result;
           if(this.result !==null){
-            db.Visitors.get(result)
+            local_db.Visitors.get(result)
               .then((visitor)=>{
                 if(visitor.name !== null){
                 console.log('処理開始'+ visitor.place);
