@@ -1,3 +1,8 @@
+async function backFromBackground(){
+  window.addEventListener("focus",()=>{
+    return true;
+  })
+}
 var local_db = new Dexie("VisitorsDataBase");
 local_db.version(1).stores({
     Visitors: "id, class, name, place"
@@ -60,6 +65,10 @@ function bulkPutData(){
           this.error = "ERROR: お使いの端末には前面カメラが搭載されていないようです。"
         } else if (error.name === 'OverconstrainedError'&&this.camera === 'rear'){
           this.error = "ERROR: お使いの端末には背面カメラがないようです。"
+        }
+      }finally{
+        if(await backFromBackground()){
+          this.camera = auto;
         }
       }
     },
