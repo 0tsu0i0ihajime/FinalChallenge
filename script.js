@@ -101,6 +101,12 @@ function bulkPutData(){
         },
         pause(){
           this.camera = 'off';
+        },onFrontChange(){
+          if(this.camera == 'auto'||this.camera == 'off'){
+            this.camera = 'front'
+          }else{
+            this.camera = 'auto'
+          }
         },
    }
   })
