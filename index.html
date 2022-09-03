@@ -30,6 +30,7 @@
     <qrcode-stream :camera="camera" @decode="onDecode" @init="onInit" class="fullscreen" id="Change"/>
     <img src="./OK.png" alt="OKサイン" v-if="JTFPause">
     <img src="./NG.png" alt="NGサイン" v-if="DPause">
+    <button style="position: fixed;bottom:20px;left:20px;z-index:1000;" type="button" @click="onFrontChange">前面カメラ</button>
   </div>
   <script src="./script.js"></script>
 </body>
