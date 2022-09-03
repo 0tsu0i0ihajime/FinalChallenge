@@ -45,17 +45,21 @@ function bulkPutData(){
             await promise
           }catch(error){
         if (error.name === 'NotAllowedError') {
-          this.error = "ERROR: you need to grant camera access permisson"
+          this.error = "ERROR: カメラへのアクセス権を付与する必要があります。"
         } else if (error.name === 'NotFoundError') {
-          this.error = "ERROR: no camera on this device"
+          this.error = "ERROR: この端末にはカメラはありません。"
         } else if (error.name === 'NotSupportedError') {
-          this.error = "ERROR: secure context required (HTTPS, localhost)"
+          this.error = "ERROR: HTTPSやlocalhostのようなセキュリティー環境が必要です。"
         } else if (error.name === 'NotReadableError') {
-          this.error = "ERROR: is the camera already in use?"
+          this.error = "ERROR: カメラを既に使用していますか？"
         } else if (error.name === 'OverconstrainedError') {
-          this.error = "ERROR: installed cameras are not suitable"
+          this.error = "ERROR: カメラが適切ではありません。"
         } else if (error.name === 'StreamApiNotSupportedError') {
-          this.error = "ERROR: Stream API is not supported in this browser"
+          this.error = "ERROR: このブラウザではStream APIがサポートされていません。"
+        } else if (error.name === 'OverconstrainedError'&&this.camera === 'auto'){
+          this.error = "ERROR: お使いの端末には前面カメラが搭載されていないようです。"
+        } else if (error.name === 'OverconstrainedError'&&this.camera === 'rear'){
+          this.error = "ERROR: お使いの端末には背面カメラがないようです。"
         }
       }
     },
