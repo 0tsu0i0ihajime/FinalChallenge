@@ -3,10 +3,6 @@ async function backFromBackground(){
     return true;
   })
 }
-var local_db = new Dexie("VisitorsDataBase");
-local_db.version(1).stores({
-    Visitors: "id, class, name, place"
-});
 function bulkPutData(){
     local_db.Visitors
     .bulkPut([
