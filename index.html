@@ -15,12 +15,6 @@
     <div v-if="!FullscreenChange">
     <p class="decode-result">最後の読み取り結果: <b>{{result}}</b><br>
     Last answer: <b id="LA"></b></p>
-    <div class="AddData">
-    <button type="button" @click="bulkPutData">DBData追加</button>
-    <div class="deleteData">
-    <button class="deleteData" type="button" @click="deleteData">DBData削除</button>
-    </div>
-    </div>
     <button style="position: fixed;bottom:20px;right: 20px;z-index: 1000;" type="button" @click="onFullChange">全画面に変更</button>
     </div>
     <div v-if="FullscreenChange">
