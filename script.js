@@ -3,20 +3,6 @@ async function backFromBackground(){
     return true;
   })
 }
-function bulkPutData(){
-    local_db.Visitors
-    .bulkPut([
-        {id:"D4A65B7E-2BBA-435E-A676-B3CE9517E926", class:"3E11", name:"KK", place:"203"},
-        {id:"DA66VZC4-14RA-UCI8-LEO2-AJVJXOA3578V", class:"2C11", name:"KT", place:"2C"},
-        {id:"5AG4644B-4SGE-JSIS-2Z2BEG5AFGE4GS4G4", class:"2C08", name:"OT", place:"104"}
-    ])
-    .then(()=>{
-        console.log('data追加成功');
-    })
-        .catch((error)=>{
-          console.error(error);
-        });
-    }
     function deleteData(){
       local_db.delete()
         .then(()=>{
